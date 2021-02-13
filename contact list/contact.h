@@ -1,6 +1,7 @@
 #pragma once
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #define MAX 1000
 #define MAX_NAME 20
 #define MAX_SEX 5
@@ -15,7 +16,17 @@ enum option
 	SEARCH,//3
 	MODIFY,//4
 	SHOW,//5
-	SORT,//6
+	CONSORT,//6
+};
+
+enum cate
+{
+	cancel,
+	mingzi,
+	nianling,
+	xingbie,
+	dianhua,
+	zhuzhi,
 };
 struct peoinfo
 {
@@ -38,3 +49,4 @@ void delete(struct CONTACT* ps);
 void search(const struct CONTACT* ps);
 void modify(struct CONTACT* ps);
 void show(const struct CONTACT* ps);
+void contactsort(struct CONTACT* ps);

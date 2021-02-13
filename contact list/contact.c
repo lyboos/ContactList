@@ -1,10 +1,43 @@
 #define  _CRT_SECURE_NO_WARNINGS 
 #include"contact.h"
 
+int cmp_name(const void* a, const void* b)
+{
+	struct peoinfo* l = (struct peoinfo*)a;
+	struct peoinfo* r = (struct peoinfo*)b;
+	return -strcmp(l->name,r->name);
+}
+
+int cmp_tel(const void* a, const void* b)
+{
+	struct peoinfo* l = (struct peoinfo*)a;
+	struct peoinfo* r = (struct peoinfo*)b;
+	return -strcmp(l->tel, r->tel);
+}
+
+int cmp_age(const void* a, const void* b) 
+{
+	return *(int*)b - *(int*)a;
+}
+
+int cmp_sex(const void* a, const void* b)
+{
+	struct peoinfo* l = (struct peoinfo*)a;
+	struct peoinfo* r = (struct peoinfo*)b;
+	return -strcmp(l->sex, r->sex);
+}
+
 void init(struct CONTACT* ps)
 {
 	memset(ps->data, 0, sizeof(ps->data));
 	ps->size = 0;
+}
+
+int cmp_add(const void* a, const void* b)
+{
+	struct peoinfo* l = (struct peoinfo*)a;
+	struct peoinfo* r = (struct peoinfo*)b;
+	return -strcmp(l->add, r->add);
 }
 
 static int findbyname(const struct CONTACT* ps, char name[MAX_NAME])
@@ -121,6 +154,50 @@ void show(const struct CONTACT* ps)
 		for ( i = 0; i < ps->size; i++)
 		{
 			printf("%-12s\t%-4d\t%-5s\t%-12s\t%-20s\n", ps->data[i].name, ps->data[i].age, ps->data[i].sex, ps->data[i].tel, ps->data[i].add);
+		}
+	}
+}
+
+void contactsort(struct CONTACT* ps)
+{
+	if (ps->size == 0)
+	{
+		printf("通讯录为空！\n");
+	}
+	else 
+	{
+		int cate = 0;
+		printf("1.name\t2.age\n3.sex\t4.tel\n5.add\n");
+		printf("按……排序:>");
+		scanf("%d", &cate);
+		switch (cate)
+		{
+		case cancel:
+			printf("取消成功\n");
+			break;
+		case mingzi:
+			qsort(ps->data, MAX, 72, cmp_name);
+			printf("重新排序成功！\n");
+			break;
+		case nianling:
+			qsort(ps->data, MAX, 72, cmp_age);
+			printf("重新排序成功！\n");
+			break;
+		case xingbie:
+			qsort(ps->data, MAX, 72, cmp_sex);
+			printf("重新排序成功！\n");
+			break;
+		case dianhua:
+			qsort(ps->data, MAX, 72, cmp_tel);
+			printf("重新排序成功！\n");
+			break;
+		case zhuzhi:
+			qsort(ps->data, MAX, 72, cmp_add);
+			printf("重新排序成功！\n");
+			break;
+		default:
+			printf("input error!");
+			break;
 		}
 	}
 }

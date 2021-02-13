@@ -43,7 +43,8 @@ int main()
 		case SHOW:
 			show(&con);
 			break;
-		case SORT:
+		case CONSORT:
+			contactsort(&con);
 			break;
 		case EXIT:
 			flag = 0;
