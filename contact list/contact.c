@@ -1,39 +1,64 @@
 #define  _CRT_SECURE_NO_WARNINGS 
 #include"contact.h"
+static void checkcapa(struct CONTACT* ps)
+{
+	if (ps->size == ps->capacity)
+	{
+		struct peoinfo* ptr=realloc(ps->data, (ps->capacity + 2) * sizeof(struct peoinfo));
+		if (ptr != NULL)
+		{
+			ps->data = ptr;
+			ps->capacity += 2;
+			printf("add room done\n");
+		}
+		else
+		{
+			printf("add room fail\n");
+		}
+	}
+}
 
-int cmp_name(const void* a, const void* b)
+static int cmp_name(const void* a, const void* b)
 {
 	struct peoinfo* l = (struct peoinfo*)a;
 	struct peoinfo* r = (struct peoinfo*)b;
-	return -strcmp(l->name,r->name);
+	return strcmp(l->name,r->name);
 }
 
-int cmp_tel(const void* a, const void* b)
+static int cmp_tel(const void* a, const void* b)
 {
 	struct peoinfo* l = (struct peoinfo*)a;
 	struct peoinfo* r = (struct peoinfo*)b;
-	return -strcmp(l->tel, r->tel);
+	return strcmp(l->tel, r->tel);
 }
 
-int cmp_age(const void* a, const void* b) 
+static int cmp_age(const void* a, const void* b)
 {
-	return *(int*)b - *(int*)a;
+	return *(int*)a - *(int*)b;
 }
 
-int cmp_sex(const void* a, const void* b)
+static int cmp_sex(const void* a, const void* b)
 {
 	struct peoinfo* l = (struct peoinfo*)a;
 	struct peoinfo* r = (struct peoinfo*)b;
-	return -strcmp(l->sex, r->sex);
+	return strcmp(l->sex, r->sex);
 }
 
 void init(struct CONTACT* ps)
 {
-	memset(ps->data, 0, sizeof(ps->data));
-	ps->size = 0;
+	ps->data = (struct peoinfo*)malloc(3 * sizeof(struct peoinfo));
+	if (ps->data == NULL)
+	{
+		return;
+	}
+	else
+	{
+		ps->size = 0;
+		ps->capacity = CAPA;
+	}
 }
 
-int cmp_add(const void* a, const void* b)
+static int cmp_add(const void* a, const void* b)
 {
 	struct peoinfo* l = (struct peoinfo*)a;
 	struct peoinfo* r = (struct peoinfo*)b;
@@ -55,25 +80,38 @@ static int findbyname(const struct CONTACT* ps, char name[MAX_NAME])
 
 void add(struct CONTACT* ps)
 {
-	if (ps->size == MAX)
-	{
-		printf("通讯录已满，无法增加！\n");
-	}
-	else
-	{
-		printf("请输入名字:>");
-		scanf("%s", ps->data[ps->size].name);
-		printf("请输入年龄:>");
-		scanf("%d", &(ps->data[ps->size].age));
-		printf("请输入性别:>");
-		scanf("%s", ps->data[ps->size].sex);
-		printf("请输入电话号码:>");
-		scanf("%s", ps->data[ps->size].tel);
-		printf("请输入地址:>");
-		scanf("%s", ps->data[ps->size].add);
-		ps->size++;
-		printf("增加成功\n");
-	}
+	checkcapa(ps);
+	printf("请输入名字:>");
+	scanf("%s", ps->data[ps->size].name);
+	printf("请输入年龄:>");
+	scanf("%d", &(ps->data[ps->size].age));
+	printf("请输入性别:>");
+	scanf("%s", ps->data[ps->size].sex);
+	printf("请输入电话号码:>");
+	scanf("%s", ps->data[ps->size].tel);
+	printf("请输入地址:>");
+	scanf("%s", ps->data[ps->size].add);
+	ps->size++;
+	printf("增加成功\n");
+	//if (ps->size == MAX)
+	//{
+	//	printf("通讯录已满，无法增加！\n");
+	//}
+	//else
+	//{
+	//	printf("请输入名字:>");
+	//	scanf("%s", ps->data[ps->size].name);
+	//	printf("请输入年龄:>");
+	//	scanf("%d", &(ps->data[ps->size].age));
+	//	printf("请输入性别:>");
+	//	scanf("%s", ps->data[ps->size].sex);
+	//	printf("请输入电话号码:>");
+	//	scanf("%s", ps->data[ps->size].tel);
+	//	printf("请输入地址:>");
+	//	scanf("%s", ps->data[ps->size].add);
+	//	ps->size++;
+	//	printf("增加成功\n");
+	//}
 }
 
 void delete(struct CONTACT* ps)
@@ -176,23 +214,23 @@ void contactsort(struct CONTACT* ps)
 			printf("取消成功\n");
 			break;
 		case mingzi:
-			qsort(ps->data, MAX, 72, cmp_name);
+			qsort(ps->data, ps->size, 72, cmp_name);
 			printf("重新排序成功！\n");
 			break;
 		case nianling:
-			qsort(ps->data, MAX, 72, cmp_age);
+			qsort(ps->data, ps->size, 72, cmp_age);
 			printf("重新排序成功！\n");
 			break;
 		case xingbie:
-			qsort(ps->data, MAX, 72, cmp_sex);
+			qsort(ps->data, ps->size, 72, cmp_sex);
 			printf("重新排序成功！\n");
 			break;
 		case dianhua:
-			qsort(ps->data, MAX, 72, cmp_tel);
+			qsort(ps->data, ps->size, 72, cmp_tel);
 			printf("重新排序成功！\n");
 			break;
 		case zhuzhi:
-			qsort(ps->data, MAX, 72, cmp_add);
+			qsort(ps->data, ps->size, 72, cmp_add);
 			printf("重新排序成功！\n");
 			break;
 		default:
@@ -200,4 +238,10 @@ void contactsort(struct CONTACT* ps)
 			break;
 		}
 	}
+}
+
+void destory(struct CONTACT* ps)
+{
+	free(ps->data);
+	ps->data = NULL;
 }

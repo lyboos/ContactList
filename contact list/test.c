@@ -48,6 +48,7 @@ int main()
 			break;
 		case EXIT:
 			flag = 0;
+			destory(&con);
 			printf("�˳�ͨѶ¼!\n");
 			break;
 		default:

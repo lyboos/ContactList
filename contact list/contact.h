@@ -2,12 +2,12 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#define MAX 1000
+//#define MAX 1000
 #define MAX_NAME 20
 #define MAX_SEX 5
 #define MAX_TEL 12
 #define MAX_ADD 30
-
+#define CAPA 3
 enum option
 {
 	EXIT,//0
@@ -39,8 +39,9 @@ struct peoinfo
 
 struct CONTACT
 {
-	struct peoinfo data[MAX];
+	struct peoinfo* data;
 	int size;
+	int capacity;
 };
 
 void init(struct CONTACT* ps);
