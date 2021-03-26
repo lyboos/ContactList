@@ -4,7 +4,7 @@ static void checkcapa(struct CONTACT* ps)
 {
 	if (ps->size == ps->capacity)
 	{
-		struct peoinfo* ptr=realloc(ps->data, (ps->capacity + 2) * sizeof(struct peoinfo));
+		struct peoinfo* ptr=(struct peoinfo*)realloc(ps->data, (ps->capacity + 2) * sizeof(struct peoinfo));
 		if (ptr != NULL)
 		{
 			ps->data = ptr;
@@ -44,6 +44,29 @@ static int cmp_sex(const void* a, const void* b)
 	return strcmp(l->sex, r->sex);
 }
 
+void load(struct CONTACT* ps) 
+{
+	struct peoinfo tem = { 0 };
+	FILE* pfr = fopen("contact list.dat","rb");
+	if (pfr==NULL)
+	{
+		printf("load:%s", strerror(errno));
+		return 0;
+	}
+	else
+	{
+		while (fread(&tem, sizeof(struct peoinfo), 1, pfr))
+		{
+			checkcapa(ps);
+			ps->data[ps->size] = tem;
+			ps->size++;
+
+		}
+		fclose(pfr);
+		pfr = NULL;
+	}
+}
+
 void init(struct CONTACT* ps)
 {
 	ps->data = (struct peoinfo*)malloc(3 * sizeof(struct peoinfo));
@@ -56,6 +79,7 @@ void init(struct CONTACT* ps)
 		ps->size = 0;
 		ps->capacity = CAPA;
 	}
+	load(ps);
 }
 
 static int cmp_add(const void* a, const void* b)
@@ -165,6 +189,7 @@ void modify(struct CONTACT* ps)
 	}
 	else
 	{
+//		FILE* pf = fopen("contact list","wb");
 		printf("请输入名字:>");
 		scanf("%s", ps->data[ps->size].name);
 		printf("请输入年龄:>");
@@ -176,6 +201,8 @@ void modify(struct CONTACT* ps)
 		printf("请输入地址:>");
 		scanf("%s", ps->data[ps->size].add);
 		printf("修改成功\n");
+//		fclose(pf);
+//		pf = NULL;
 	}
 }
 
@@ -244,4 +271,23 @@ void destory(struct CONTACT* ps)
 {
 	free(ps->data);
 	ps->data = NULL;
+}
+
+void save(struct CONTACT* ps)
+{
+	FILE* pfw = fopen("contact list.dat", "wb");
+	if (pfw== NULL)
+	{
+		printf("%s\n", strerror(errno));
+		return 0;
+	}
+	else
+	{
+		int i = 0;
+		for ( i = 0; i < ps->size; i++)
+		{
+			fwrite(&(ps->data[i]),sizeof(struct peoinfo),1,pfw);
+		}
+		printf("save successfully!\n");
+	}
 }
