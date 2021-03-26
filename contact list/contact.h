@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#include<errno.h>
 //#define MAX 1000
 #define MAX_NAME 20
 #define MAX_SEX 5
@@ -18,7 +17,6 @@ enum option
 	MODIFY,//4
 	SHOW,//5
 	CONSORT,//6
-	SAVE,//7
 };
 
 enum cate
@@ -53,4 +51,3 @@ void search(const struct CONTACT* ps);
 void modify(struct CONTACT* ps);
 void show(const struct CONTACT* ps);
 void contactsort(struct CONTACT* ps);
-void save(struct CONTACT* ps);
