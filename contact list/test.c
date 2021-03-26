@@ -9,7 +9,7 @@ void menu()
 	printf("******| 1.add    |   2.del  |******\n"); 
 	printf("******| 3.search | 4.modify |******\n");
 	printf("******| 5.show   |   6.sort |******\n");
-	printf("******| 0.exit              |******\n");
+	printf("******| 7.save   |   0.exit |******\n");
 	printf("***********************************\n");
 	printf("***********************************\n");
 }
@@ -48,8 +48,12 @@ int main()
 			break;
 		case EXIT:
 			flag = 0;
+			save(&con);
 			destory(&con);
 			printf("�˳�ͨѶ¼!\n");
+			break;
+		case SAVE:
+			save(&con);
 			break;
 		default:
 			printf("selection wrong\n");
